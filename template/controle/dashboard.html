@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nenem Auto Peças</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <img src="{% static 'img/logo_sistemanenem.jpg' %}" alt="Nenem Auto Peças" class="logo-img">
+            <span>Auto Peças - Sistema de Controle</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Setores</h3>
+            <a href="#" class="active"> Inicio</a>
+            <a href="{% url 'estoque' %}"> Estoque</a>
+            <a href="{% url 'compras' %}"> Compras</a>
+            <a href="{% url 'vendas' %}"> Vendas</a>
+            <a href="{% url 'financeiro' %}"> Financeiro</a>
+            <a href="{% url 'fiscal' %}"> Fiscal</a>
+            <a href="{% url 'usuarios' %}"> Usuarios</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>Bem-vindo(a) à Nenem Auto Peças</h1>
+
+            <section class="cards">
+                <div class="card blue">
+                    <h3>Estoque</h3>
+                    <p class="number">{{ total_produtos }} Peças</p>
+                </div>
+                <div class="card cyan">
+                    <h3>Vendas</h3>
+                    <p class="number">R$ {{ total_vendas|floatformat:2 }}</p>
+                </div>
+                <div class="card darkblue">
+                    <h3>Compras</h3>
+                    <p class="number">R$ {{ total_compras|floatformat:2 }}</p>
+                </div>
+                <div class="card gray">
+                    <h3>Financeiro</h3>
+                    <p class="number">Saldo: R$ {{ saldo|floatformat:2 }}</p>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <h2>Últimas Vendas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in ultimas_vendas %}
+                        <tr>
+                            <td>{{ v.descricao }}</td>
+                            <td>R$ {{ v.valor|floatformat:2 }}</td>
+                            <td>{{ v.data|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3">Nenhuma venda registrada ainda.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

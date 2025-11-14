@@ -1,0 +1,124 @@
+/* === Tema geral - Azul escuro elegante === */
+body {
+    font-family: "Segoe UI", "Poppins", sans-serif;
+    background-color: #eef2f8; /* fundo mais suave e limpo */
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+}
+
+/* === Navbar === */
+.navbar {
+    background-color: #001a33 !important; /* azul petróleo escuro */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.navbar-brand,
+.nav-link {
+    color: #f8f9fa !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #66b3ff !important; /* azul claro ao passar o mouse */
+}
+
+.nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid #66b3ff;
+}
+
+/* === Cards === */
+.card {
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #003366, #002b5c);
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    background-color: #f9fbff;
+    border-radius: 0 0 14px 14px;
+    color: #002b5c;
+}
+
+/* === Tabela === */
+.table {
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background-color: #002b5c;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 12px 8px;
+    color: #1a1a1a;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+    background-color: #f2f6fc;
+}
+
+/* === Botões === */
+.btn-warning {
+    width: 100px;
+    border: none;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.btn-warning:hover {
+    background-color: #003d80;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background-color: #a81d2e;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #7e1423;
+}
+
+/* === Títulos === */
+h1, h2, h3 {
+    color: #002b5c;
+    font-weight: 600;
+}
+
+/* === Responsividade === */
+@media (max-width: 768px) {
+    .navbar-brand { font-size: 1rem; }
+    .card { margin-bottom: 15px; }
+    .table thead { font-size: 0.9rem; }
+    .table tbody td { font-size: 0.9rem; }
+}

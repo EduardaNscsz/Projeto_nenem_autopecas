@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - Nenem Autopeças</title>
+    <link rel="stylesheet" href="{% static 'css/financeiro.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>Controle Financeiro</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Início</a></li>
+            <li><a href="{% url 'compras' %}">Compras</a></li>
+            <li><a href="{% url 'financeiro' %}" class="ativo">Financeiro</a></li>
+            <a href="{% url 'estoque' %}"> Estoque</a>
+            <a href="{% url 'compras' %}"> Compras</a>
+            <a href="{% url 'vendas' %}"> Vendas</a>
+            <a href="{% url 'financeiro' %}"> Financeiro</a>
+            <a href="{% url 'fiscal' %}"> Fiscal</a>
+            <a href="{% url 'usuarios' %}"> Usuarios</a>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <!-- Resumo financeiro -->
+    <section class="resumo">
+        <div class="card">
+            <h2>Entradas</h2>
+            <p>R$ {{ entrada|default:"0.00"|floatformat:2 }}</p>
+        </div>
+        <div class="card">
+            <h2>Saídas</h2>
+            <p>R$ {{ saida|default:"0.00"|floatformat:2 }}</p>
+        </div>
+        <div class="card">
+            <h2>Saldo</h2>
+            <p>R$ {{ saldo|default:"0.00"|floatformat:2 }}</p>
+        </div>
+    </section>
+
+    <!-- Histórico de transações -->
+    <section class="tabela">
+        <h2>Histórico de Movimentações</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Valor (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transacoes %}
+                    <tr>
+                        <td>{{ t.data|date:"d/m/Y H:i" }}</td>
+                        <td>{{ t.descricao }}</td>
+                        <td>{{ t.tipo|title }}</td>
+                        <td>{{ t.valor|floatformat:2 }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">Nenhuma movimentação registrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+</body>
+</html>

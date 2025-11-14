@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Nenem Auto-peças</title>
+    <link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro</h1>
+
+        {% if messages %}
+            {% for m in messages %}
+                <p class="messages">{{ m }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="text" name="nome" placeholder="Seu nome completo" required><br>
+            <input type="email" name="email" placeholder="Digite seu e-mail" required><br>
+
+            <select name="cargo" required>
+                <option value="">Selecione seu cargo</option>
+                <option value="Recepcionista">Recepcionista</option>
+                <option value="Gerente">Gerente</option>
+                <option value="Vendedor">Vendedor</option>
+                <option value="Financeiro">Financeiro</option>
+            </select><br>
+
+            <input type="password" name="senha" placeholder="Digite sua senha" required><br>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <p class="link">
+            Já tem conta? 
+            <a href="{% url 'login' %}">Faça login</a>
+        </p>
+    </div>
+</body>
+</html>

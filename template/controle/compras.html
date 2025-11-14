@@ -1,0 +1,204 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Compras - Nenem Autopeças</title>
+    <link rel="stylesheet" href="{% static 'css/compras.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>Controle de Compras</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dashboard' %}"> Início</a></li>
+            <li><a href="{% url 'compras' %}" class="ativo"> Compras</a></li>
+            <li><a href="{% url 'financeiro' %}"> Financeiro</a></li>
+            <a href="{% url 'estoque' %}"> Estoque</a>
+            <a href="{% url 'vendas' %}"> Vendas</a>
+            <a href="{% url 'fiscal' %}"> Fiscal</a>
+            <a href="{% url 'usuarios' %}"> Usuarios</a>
+            
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <!-- Resumo financeiro -->
+    <section class="resumo">
+        <div class="card">
+            <h2>Total Gasto</h2>
+            <p>R$ {{ total_gasto|default:"0.00" }}</p>
+        </div>
+        <div class="card">
+            <h2>Total de Itens</h2>
+            <p>{{ total_itens|default:"0" }}</p>
+        </div>
+    </section>
+
+    <!-- Formulário de compra -->
+    <section class="formulario">
+        <h2>Registrar Nova Compra</h2>
+        <form method="POST" id="form-compras">
+            {% csrf_token %}
+
+            <label for="fornecedor">Fornecedor:</label>
+            <input type="text" id="fornecedor" name="fornecedor" placeholder="Ex: Auto Peças Brasil" required>
+
+            <div id="tabela-compras">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor Unitário (R$)</th>
+                            <th>Subtotal (R$)</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela">
+                        <tr>
+                            <td>
+                                <input type="text" name="produto_nome[]" list="lista-produtos" placeholder="Digite ou adicione um produto" required oninput="verificarProduto(this)">
+                                <datalist id="lista-produtos">
+                                    {% for produto in produtos %}
+                                        <option value="{{ produto.nome }}"></option>
+                                    {% endfor %}
+                                </datalist>
+                            </td>
+                            <td><input type="number" name="quantidade[]" min="1" value="1" oninput="atualizarSubtotal(this)" required></td>
+                            <td><input type="number" name="preco[]" step="0.01" value="0" oninput="atualizarSubtotal(this)" required></td>
+                            <td class="subtotal">0,00</td>
+                            <td><button type="button" class="btn-remover" onclick="removerLinha(this)">✕</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="button" class="add-row" onclick="adicionarLinha()">+ Adicionar Produto</button>
+
+            <div class="novo-produto" id="novo-produto">
+                <h4>🆕 Adicionar Novo Produto ao Estoque</h4>
+                <label>Nome:</label>
+                <input type="text" id="novo_nome" placeholder="Nome do produto">
+                <label>Preço Unitário (R$):</label>
+                <input type="number" id="novo_preco" step="0.01">
+                <label>Quantidade Inicial:</label>
+                <input type="number" id="novo_qtd" min="1" value="1">
+                <button type="button" onclick="salvarNovoProduto()">Salvar Produto</button>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <label for="adicionar_estoque">Deseja adicionar ao estoque?</label>
+                <select id="adicionar_estoque" name="adicionar_estoque" required>
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+
+            <h3 style="text-align:right; margin-top:20px;">Total da Compra: R$ <span id="totalGeral">0,00</span></h3>
+
+            <button type="submit">Registrar Compra</button>
+        </form>
+    </section>
+
+    <!-- Histórico -->
+    <section class="tabela">
+        <h2>Histórico de Compras</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Fornecedor</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Total (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for compra in compras %}
+                    <tr>
+                        <td>{{ compra.data }}</td>
+                        <td>{{ compra.fornecedor }}</td>
+                        <td>{{ compra.produto.nome }}</td>
+                        <td>{{ compra.quantidade }}</td>
+                        <td>{{ compra.valor_total }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">Nenhuma compra registrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<script>
+function atualizarSubtotal(input) {
+    const row = input.closest('tr');
+    const qtd = parseFloat(row.querySelector('input[name="quantidade[]"]').value) || 0;
+    const preco = parseFloat(row.querySelector('input[name="preco[]"]').value) || 0;
+    row.querySelector('.subtotal').textContent = (qtd * preco).toFixed(2).replace('.', ',');
+    atualizarTotalGeral();
+}
+
+function atualizarTotalGeral() {
+    let total = 0;
+    document.querySelectorAll('.subtotal').forEach(td => {
+        total += parseFloat(td.textContent.replace(',', '.')) || 0;
+    });
+    document.getElementById('totalGeral').textContent = total.toFixed(2).replace('.', ',');
+}
+
+function adicionarLinha() {
+    const tabela = document.getElementById('corpo-tabela');
+    const nova = tabela.rows[0].cloneNode(true);
+    nova.querySelectorAll('input').forEach(inp => inp.value = inp.name.includes('quantidade') ? 1 : '');
+    nova.querySelector('.subtotal').textContent = '0,00';
+    tabela.appendChild(nova);
+}
+
+function removerLinha(botao) {
+    const tabela = document.getElementById('corpo-tabela');
+    if (tabela.rows.length > 1) {
+        botao.closest('tr').remove();
+        atualizarTotalGeral();
+    }
+}
+
+function verificarProduto(input) {
+    const lista = document.querySelectorAll('#lista-produtos option');
+    const nomes = Array.from(lista).map(opt => opt.value.toLowerCase());
+    const nomeDigitado = input.value.toLowerCase();
+    const novoProdutoDiv = document.getElementById('novo-produto');
+
+    if (nomeDigitado && !nomes.includes(nomeDigitado)) {
+        novoProdutoDiv.style.display = 'block';
+        document.getElementById('novo_nome').value = input.value;
+    } else {
+        novoProdutoDiv.style.display = 'none';
+    }
+}
+
+function salvarNovoProduto() {
+    const nome = document.getElementById('novo_nome').value;
+    const preco = document.getElementById('novo_preco').value;
+    const qtd = document.getElementById('novo_qtd').value;
+
+    if (!nome || !preco) {
+        return alert("Preencha nome e preço!");
+    }
+
+    const lista = document.getElementById('lista-produtos');
+    const novaOpcao = document.createElement('option');
+    novaOpcao.value = nome;
+    lista.appendChild(novaOpcao);
+
+    alert(`Produto "${nome}" adicionado com sucesso!`);
+    document.getElementById('novo-produto').style.display = 'none';
+}
+</script>
+
+</body>
+</html>

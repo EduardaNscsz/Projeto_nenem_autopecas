@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Vendas - Nenem Autopeças</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/vendas.css' %}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">Nenem Autopeças</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Início</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'vendas' %}">Vendas</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'estoque' %}">Estoque</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'compras' %}">Compras</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'financeiro' %}">Financeiro</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container my-4">
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- TOTAL VENDIDO -->
+    <div class="alert alert-success text-center mb-4" role="alert" style="font-size:1.2rem;">
+        Total vendido até agora: <strong>R$ {{ total_vendido|default:"0.00"|floatformat:2 }}</strong>
+    </div>
+
+    <!-- FORMULÁRIO DE VENDAS -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title mb-3">Registrar Venda</h3>
+
+            <form method="post" id="form-vendas">
+                {% csrf_token %}
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle" id="tabela-vendas">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:45%">Produto</th>
+                                <th style="width:12%">Quantidade</th>
+                                <th style="width:15%">Valor Unit. (R$)</th>
+                                <th style="width:15%">Subtotal (R$)</th>
+                                <th style="width:8%">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpo-tabela">
+                            <tr>
+                                <td>
+                                    <select name="produto_id[]" class="form-select produto-select" onchange="atualizarPreco(this)" required>
+                                        <option value="">Selecione...</option>
+                                        {% for produto in produtos %}
+                                            <option value="{{ produto.id }}" data-preco="{{ produto.valor }}" data-qty="{{ produto.quantidade }}">
+                                                {{ produto.nome }} — (estoque: {{ produto.quantidade }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td><input type="number" name="quantidade[]" min="1" value="1" class="form-control" oninput="atualizarSubtotal(this)" required></td>
+                                <td><input type="text" name="preco_readonly[]" class="form-control preco-readonly" oninput="atualizarSubtotal(this)"></td>
+                                <td class="subtotal">0,00</td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removerLinha(this)">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button type="button" class="btn btn-success" onclick="adicionarLinha()">+ Adicionar Produto</button>
+                    </div>
+                    <div class="text-end">
+                        <h5>Total: R$ <span id="totalGeral">0,00</span></h5>
+                        <button type="submit" class="btn btn-primary btn-lg mt-2">Finalizar Venda</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- HISTÓRICO DE VENDAS -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Histórico de Vendas (últimas 20)</h5>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Valor Total (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venda in vendas_recentes %}
+                            <tr>
+                                <td>{{ venda.data|date:"d/m/Y H:i" }}</td>
+                                <td>{{ venda.descricao|truncatechars:80 }}</td>
+                                <td>{{ venda.valor|floatformat:2 }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="3">Nenhuma venda registrada.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function formatBR(value){ return Number(value).toFixed(2).replace('.', ','); }
+
+function atualizarSubtotal(input){
+    const row = input.closest('tr');
+    const qtd = parseInt(row.querySelector('input[name="quantidade[]"]').value) || 0;
+    let precoText = row.querySelector('.preco-readonly').value || '0';
+    precoText = precoText.toString().replace(/\s/g,'').replace(',', '.').replace(/[^0-9\.]/g,'') || '0';
+    const preco = parseFloat(precoText) || 0;
+    const subtotal = qtd * preco;
+    row.querySelector('.subtotal').textContent = formatBR(subtotal);
+    atualizarTotalGeral();
+}
+
+function atualizarPreco(select){
+    const option = select.selectedOptions[0];
+    const row = select.closest('tr');
+    const precoInput = row.querySelector('.preco-readonly');
+
+    if (option && option.value) {
+        let precoEstoque = option.getAttribute('data-preco') || '0';
+        precoEstoque = precoEstoque.toString().replace(',', '.').replace(/[^0-9\.]/g,'') || '0';
+        precoInput.value = formatBR(parseFloat(precoEstoque));
+    } else {
+        precoInput.value = "0,00";
+    }
+    atualizarSubtotal(select);
+}
+
+function atualizarTotalGeral(){
+    let total = 0;
+    document.querySelectorAll('.subtotal').forEach(td=>{
+        const val = parseFloat(td.textContent.replace(',', '.')) || 0;
+        total += val;
+    });
+    document.getElementById('totalGeral').textContent = formatBR(total);
+}
+
+function adicionarLinha(){
+    const tabela = document.getElementById('corpo-tabela');
+    const nova = tabela.rows[0].cloneNode(true);
+    nova.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+    nova.querySelectorAll('input').forEach(i => i.value = (i.name.includes('quantidade') ? 1 : ''));
+    nova.querySelector('.subtotal').textContent = '0,00';
+    tabela.appendChild(nova);
+}
+
+function removerLinha(btn){
+    const tabela = document.getElementById('corpo-tabela');
+    if (tabela.rows.length > 1) {
+        btn.closest('tr').remove();
+        atualizarTotalGeral();
+    }
+}
+
+document.getElementById('form-vendas').addEventListener('submit', function(e){
+    const selects = document.querySelectorAll('select[name="produto_id[]"]');
+    const qts = document.querySelectorAll('input[name="quantidade[]"]');
+    for (let i = 0; i < selects.length; i++){
+        const opt = selects[i].selectedOptions[0];
+        if (!opt || !opt.value) { e.preventDefault(); alert("Selecione o produto."); return; }
+        const estoque = parseInt(opt.getAttribute('data-qty') || 0);
+        const qtd = parseInt(qts[i].value || 0);
+        if (qtd <= 0) { e.preventDefault(); alert("Informe uma quantidade válida."); return; }
+        if (qtd > estoque) { e.preventDefault(); alert(`Estoque insuficiente (${estoque}).`); return; }
+    }
+});
+</script>
+</body>
+</html>
