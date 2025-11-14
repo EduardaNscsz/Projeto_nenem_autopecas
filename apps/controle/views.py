@@ -64,7 +64,7 @@ def logout_view(request):
 def controle_cadastro(request):
     if request.method == "POST":
         nome = request.POST.get("nome")
-        cargo = request.POST.get("cargo")  # << ADICIONADO
+        cargo = request.POST.get("cargo")  
         email = request.POST.get("email")
         senha = request.POST.get("senha")
 
@@ -77,7 +77,7 @@ def controle_cadastro(request):
             email=email,
             password=senha,
             first_name=nome,
-            last_name=cargo  # << SALVA O CARGO AQUI
+            last_name=cargo  
         )
 
         login(request, usuario)

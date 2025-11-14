@@ -7,9 +7,6 @@
     <title>Fiscal e Relatórios - Nenem Auto Peças</title>
     
     <style>
-        /* --- 1. CSS DE LAYOUT BASE (dashboard.css) --- */
-        
-        /* Layout Global */
         body { 
             font-family: Arial, sans-serif; 
             margin: 0; 
@@ -102,7 +99,7 @@
             margin-bottom: 20px;
         }
 
-        /* --- 2. CSS ESPECÍFICO (fiscal.css e estilos de tabela) --- */
+
 
         .tab-buttons {
             overflow: hidden;
@@ -439,8 +436,7 @@
                     if (e.target.classList.contains('btn-emitir')) {
                         const index = e.target.getAttribute('data-index');
                         vendasData[index].emitida = true; 
-                        
-                        /* 🔧 LINHA CORRIGIDA */
+                
                         console.log(`SIMULAÇÃO: NFC-e para "${vendasData[index].produto}" emitida. Número: ${Math.floor(Math.random() * 900000) + 100000}`);
                         
                         renderizarTabelaVendas();

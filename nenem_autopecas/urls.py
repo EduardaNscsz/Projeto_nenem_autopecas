@@ -16,14 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from django.conf import settings          # 🔹 Import necessário para acessar STATIC_URL e DEBUG
-from django.conf.urls.static import static # 🔹 Import para servir arquivos estáticos no modo DEBUG
+from django.conf import settings          # Import necessário para acessar STATIC_URL e DEBUG
+from django.conf.urls.static import static # Import para servir arquivos estáticos no modo DEBUG
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.controle.urls')),  # Rota raiz direciona para o app 'controle'
 ]
 
-# 🔹 Permite o carregamento dos arquivos estáticos (CSS, imagens, JS) em modo de desenvolvimento
+# Permite o carregamento dos arquivos estáticos (CSS, imagens, JS) em modo de desenvolvimento
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
