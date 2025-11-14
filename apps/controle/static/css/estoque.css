@@ -1,15 +1,15 @@
-/* === Tema geral - Azul escuro elegante === */
+
 body {
     font-family: "Segoe UI", "Poppins", sans-serif;
-    background-color: #eef2f8; /* fundo mais suave e limpo */
+    background-color: #eef2f8; 
     color: #1a1a1a;
     margin: 0;
     padding: 0;
 }
 
-/* === Navbar === */
+
 .navbar {
-    background-color: #001a33 !important; /* azul petróleo escuro */
+    background-color: #001a33 !important; 
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
@@ -21,7 +21,7 @@ body {
 }
 
 .nav-link:hover {
-    color: #66b3ff !important; /* azul claro ao passar o mouse */
+    color: #66b3ff !important; 
 }
 
 .nav-link.active {
@@ -29,7 +29,6 @@ body {
     border-bottom: 2px solid #66b3ff;
 }
 
-/* === Cards === */
 .card {
     border: none;
     border-radius: 14px;
@@ -56,7 +55,7 @@ body {
     color: #002b5c;
 }
 
-/* === Tabela === */
+
 .table {
     background-color: #ffffff;
     border-radius: 10px;
@@ -84,7 +83,6 @@ body {
     background-color: #f2f6fc;
 }
 
-/* === Botões === */
 .btn-warning {
     width: 100px;
     border: none;
@@ -109,13 +107,11 @@ body {
     background-color: #7e1423;
 }
 
-/* === Títulos === */
 h1, h2, h3 {
     color: #002b5c;
     font-weight: 600;
 }
 
-/* === Responsividade === */
 @media (max-width: 768px) {
     .navbar-brand { font-size: 1rem; }
     .card { margin-bottom: 15px; }

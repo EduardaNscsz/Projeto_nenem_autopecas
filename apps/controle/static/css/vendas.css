@@ -1,15 +1,11 @@
-/* ============================= */
-/* ESTILO PRINCIPAL - VENDAS     */
-/* ============================= */
 
-/* --- Layout Global --- */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     background-color: #f4f7f9;
 }
 
-/* Navbar */
+
 .navbar {
     background-color: #124070 !important;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -35,34 +31,33 @@ body {
     border-bottom: 2px solid #ffc107;
 }
 
-/* Container Principal */
+
 .container {
     max-width: 1200px;
     margin: 20px auto;
     padding: 0 15px;
 }
 
-/* Alertas */
+
 .alert {
     border-radius: 8px;
     font-size: 1rem;
     padding: 12px 18px;
 }
 
-/* Cards */
+
 .card {
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.08);
     margin-bottom: 20px;
 }
 
-/* Card Titles */
 .card-title {
     color: #2c3e50;
     font-weight: 600;
 }
 
-/* Formulário de Vendas */
+
 #form-vendas .form-select,
 #form-vendas .form-control {
     border-radius: 6px;
@@ -99,7 +94,7 @@ body {
     color: #fff;
 }
 
-/* Tabela de Produtos */
+
 #tabela-vendas th {
     background-color: #f1f3f5;
     text-align: center;
@@ -115,14 +110,12 @@ body {
     color: #007bff;
 }
 
-/* Total Geral */
 #totalGeral {
     font-size: 1.3rem;
     font-weight: bold;
     color: #28a745;
 }
 
-/* Histórico de Vendas */
 .card-body table {
     width: 100%;
     border-collapse: collapse;
@@ -143,7 +136,7 @@ body {
     background-color: #f9f9f9;
 }
 
-/* Botões */
+
 button {
     cursor: pointer;
 }
@@ -152,7 +145,7 @@ button:focus {
     outline: none;
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
     .navbar-nav {
         text-align: center;

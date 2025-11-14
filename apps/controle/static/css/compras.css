@@ -1,6 +1,4 @@
-/* ================================
-   1. LAYOUT GERAL
-================================ */
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -9,9 +7,6 @@ body {
     min-height: 100vh;
 }
 
-/* ================================
-   2. SIDEBAR / MENU LATERAL
-================================ */
 header {
     width: 220px;
     background-color: #2c3e50;
@@ -30,7 +25,6 @@ header h1 {
     color: #1abc9c;
 }
 
-/* Menu */
 header nav ul {
     list-style: none;
     padding: 0;
@@ -64,7 +58,7 @@ header nav ul li a.ativo {
     border-left: 5px solid #f1c40f;
 }
 
-/* Ajuste links extras fora do li */
+
 header nav ul a {
     display: block;
     padding: 10px 25px;
@@ -80,18 +74,14 @@ header nav ul a:hover {
     color: #fff;
 }
 
-/* ================================
-   3. ÁREA PRINCIPAL
-================================ */
+
 main {
     flex: 1;
     padding: 30px;
     background: #ecf0f1;
 }
 
-/* ================================
-   4. CARDS RESUMO
-================================ */
+
 .resumo {
     display: flex;
     gap: 20px;
@@ -117,12 +107,9 @@ main {
 .resumo .card p {
     font-size: 1.5em;
     font-weight: bold;
-    line-height: 1; /* corrige desalinhamento do 0,00 */
+    line-height: 1; 
 }
 
-/* ================================
-   5. FORMULÁRIO DE COMPRAS
-================================ */
 #form-compras label {
     display: block;
     margin: 10px 0 5px;
@@ -153,9 +140,6 @@ main {
     background-color: #16a085;
 }
 
-/* ================================
-   6. TABELA DE PRODUTOS
-================================ */
 #tabela-compras table {
     width: 100%;
     border-collapse: collapse;

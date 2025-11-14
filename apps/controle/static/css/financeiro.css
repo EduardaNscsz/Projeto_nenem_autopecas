@@ -30,7 +30,7 @@ header h1 {
     color: #1abc9c;
 }
 
-/* Menu */
+
 header nav ul {
     list-style: none;
     padding: 0;
@@ -64,7 +64,6 @@ header nav ul li a.ativo {
     border-left: 5px solid #f1c40f;
 }
 
-/* Ajuste links extras fora do li */
 header nav ul a {
     display: block;
     padding: 10px 25px;
@@ -80,18 +79,12 @@ header nav ul a:hover {
     color: #fff;
 }
 
-/* ================================
-   3. ÁREA PRINCIPAL
-================================ */
 main {
     flex: 1;
     padding: 30px;
     background: #ecf0f1;
 }
 
-/* ================================
-   4. CARDS RESUMO
-================================ */
 .resumo {
     display: flex;
     gap: 20px;
@@ -117,12 +110,10 @@ main {
 .resumo .card p {
     font-size: 1.5em;
     font-weight: bold;
-    line-height: 1; /* alinha melhor os números */
+    line-height: 1;
 }
 
-/* ================================
-   5. HISTÓRICO DE TRANSAÇÕES
-================================ */
+
 .tabela {
     background: #fff;
     padding: 15px;
@@ -169,7 +160,7 @@ main {
     background-color: #dce6f1;
 }
 
-/* Valor positivo e negativo */
+
 .tabela td:last-child {
     font-weight: bold;
 }
@@ -182,9 +173,7 @@ main {
     color: #dc3545;
 }
 
-/* ================================
-   6. RESPONSIVIDADE
-================================ */
+
 @media (max-width: 768px) {
     body {
         flex-direction: column;
